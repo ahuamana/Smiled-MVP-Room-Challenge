@@ -8,23 +8,23 @@ import kotlinx.coroutines.flow.Flow
 
 class MainActivityViewModel(private val repository: ActividadRepository) : ViewModel() {
 
-    /*
-    lateinit var allActividades: Flow<List<Actividad>>
-    //val actividadDao: ActividadDao
 
-    init {
-         allActividades = MutableLiveData()
-        //actividadDao = AppDatabase.getInstanceAppDatabase(getApplication())?.ActividadDao()!!
+    fun allactividades(): Flow<List<Actividad>>
+    {
+        return repository.getall()
     }
-    */
 
-    fun allactividades(): Flow<List<Actividad>> = repository.getall()
+    fun allNotCompletedActividades(): Flow<List<Actividad>>
+    {
+        return repository.getallNotCompleted()
+    }
 
 
     suspend fun insert(actividad: Actividad)
     {
         repository.insert(actividad)
     }
+
 
 }
 

@@ -1,6 +1,7 @@
 package com.paparazziapps.mvp_smile_room.adapters
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paparazziapps.mvp_smile_room.databinding.CardviewActividadBinding
 import com.paparazziapps.mvp_smile_room.databinding.CardviewAddActivityBinding
 import com.paparazziapps.mvp_smile_room.models.Actividad
+import kotlinx.coroutines.withContext
+import java.util.ArrayList
 import kotlin.random.Random
 
 //¿Recuerdas la clase DiffCallback que significa?
@@ -17,8 +20,11 @@ import kotlin.random.Random
 class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapter<Actividad, Adapter.MyViewHolder>(DiffCallback)  {
 
 
+
     // DiffCallback
     companion object{
+
+        private var lista: List<Actividad> = ArrayList<Actividad>()
 
         private val DiffCallback = object : DiffUtil.ItemCallback<Actividad>()
         {
@@ -36,6 +42,18 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapt
 
     }
 
+    fun setList(list: List<Actividad>)
+    {
+        lista = list
+    }
+
+    fun getList() : List<Actividad>
+    {
+        return lista
+    }
+
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
@@ -52,18 +70,37 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapt
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         //All code here
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 
 
    class MyViewHolder(private var binding: CardviewActividadBinding) : RecyclerView.ViewHolder(binding.root)
    {
        @SuppressLint ("SimpleDateFormat")
-       fun bind(actividad: Actividad)
+       fun bind(actividad: Actividad, position: Int)
        {
-           var new=Random.nextInt(0,20)
-
+           val new=Random.nextInt(0,20)
            binding.titulo.text  = (actividad.titulo + " - ${new}")
+           binding.fechaInicio.text = actividad.fecha_inicio.toString()
+           binding.fechaFin.text = actividad.fecha_fin
+           binding.descripcion.text = actividad.contenido
+
+           var lastElement = lista.size - position
+
+           if(lastElement<10)
+           {
+               binding.activityNumber.text = "0${lista.size - position}"
+               //Log.e("TAG MENOR","Lista"+ position )
+               //Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
+           }else
+           {
+               binding.activityNumber.text = "${lista.size - position}"
+               //Log.e("TAG MAYOR","Lista"+ position )
+               //Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
+           }
+
+           //Log.e("TAG","Lista"+ lista.size )
+
        }
    }
 }

@@ -19,6 +19,9 @@ interface ActividadDao {
     @Query("Delete from table_actividad")
     suspend fun deteleAll()
 
-    @Query("Select * from table_actividad order by codigo desc")
-    fun getAllActividades(): Flow<List<Actividad>>
+    @Query("Select * from table_actividad where isCompleted= 0 order by codigo desc")
+    fun getAllCompletedActividades(): Flow<List<Actividad>>
+
+    @Query("Select * from table_actividad where isCompleted= 1 order by codigo desc")
+    fun getAllNotCompletedActividades() : Flow<List<Actividad>>
 }

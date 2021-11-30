@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class ActividadRepository(private val dao: ActividadDao) {
 
-    val actividades = dao.getAllActividades()
+    val actividades = dao
 
     suspend fun insert(actividad: Actividad)
     {
@@ -28,7 +28,12 @@ class ActividadRepository(private val dao: ActividadDao) {
         dao.deteleAll()
     }
 
-    fun getall() : Flow<List<Actividad>> = dao.getAllActividades()
+    fun getall() : Flow<List<Actividad>> = dao.getAllCompletedActividades()
+
+    fun getallNotCompleted() : Flow<List<Actividad>>
+    {
+        return dao.getAllCompletedActividades()
+    }
 
 
 }

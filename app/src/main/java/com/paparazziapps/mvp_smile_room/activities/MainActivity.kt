@@ -25,14 +25,11 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
-    lateinit var mAdapter: Adapter
 
+    private lateinit var mAdapter: Adapter
     private lateinit var viewModel2: MainActivityViewModel
-
     private lateinit var recyclerView: RecyclerView
-
     private lateinit var actividad: Actividad
-
     private lateinit var repository: ActividadRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,21 +39,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         //all code here
-
         repository = ActividadRepository((application as ActividadAplication).database.ActividadDao())
-
-        viewModel2 = ViewModelProvider(
-            this,
-            MainActivityViewModelFactory(repository)
-        ).get(MainActivityViewModel::class.java)
-
-
-        showAllActividades()
+        viewModel2 = ViewModelProvider(this, MainActivityViewModelFactory(repository)).get(MainActivityViewModel::class.java)
 
 
         binding.fabAdd.setOnClickListener {
             showDialog()
         }
+
+        showAllActividades()
 
 
     }
@@ -72,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         lifecycle.coroutineScope.launch {
             viewModel2.allactividades().collect{
                 mAdapter.submitList(it)
+                mAdapter.setList(mAdapter.currentList)
             }
         }
 
@@ -98,10 +90,15 @@ class MainActivity : AppCompatActivity() {
 
             actividad = Actividad()
             actividad.titulo = binding2.titulo.text.toString()
+            actividad.contenido = binding2.contenido.text.toString()
+            actividad.fecha_inicio = System.currentTimeMillis()
+            actividad.fecha_fin = binding2.fechaFin.text.toString()
+            actividad.isCompleted = false
 
             lifecycle.coroutineScope.launch {
                 viewModel2.insert(actividad)
                 dialog.dismiss()
+                mAdapter.setList(mAdapter.currentList)
             }
 
 
