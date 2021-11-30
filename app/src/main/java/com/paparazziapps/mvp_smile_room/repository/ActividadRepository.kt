@@ -2,6 +2,7 @@ package com.paparazziapps.mvp_smile_room.repository
 
 import com.paparazziapps.mvp_smile_room.interfaces.ActividadDao
 import com.paparazziapps.mvp_smile_room.models.Actividad
+import kotlinx.coroutines.flow.Flow
 
 class ActividadRepository(private val dao: ActividadDao) {
 
@@ -27,7 +28,7 @@ class ActividadRepository(private val dao: ActividadDao) {
         dao.deteleAll()
     }
 
-    fun getall() : List<Actividad> = dao.getAllActividades()
+    fun getall() : Flow<List<Actividad>> = dao.getAllActividades()
 
 
 }

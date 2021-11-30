@@ -1,34 +1,43 @@
 package com.paparazziapps.mvp_smile_room.ViewModels
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import com.paparazziapps.mvp_smile_room.appdatabase.AppDatabase
+import androidx.lifecycle.*
 import com.paparazziapps.mvp_smile_room.interfaces.ActividadDao
 import com.paparazziapps.mvp_smile_room.models.Actividad
-import com.paparazziapps.mvp_smile_room.repository.ActividadRepository
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 
-class MainActivityViewModel(private val repository: ActividadRepository) : ViewModel() {
+class MainActivityViewModel(private val actividadDao: ActividadDao) : ViewModel() {
 
-    lateinit var allActividades: MutableLiveData<List<Actividad>>
+    /*
+    lateinit var allActividades: Flow<List<Actividad>>
     //val actividadDao: ActividadDao
 
     init {
-        allActividades = MutableLiveData()
+         allActividades = MutableLiveData()
         //actividadDao = AppDatabase.getInstanceAppDatabase(getApplication())?.ActividadDao()!!
     }
+    */
 
-    fun allactividades(): List<Actividad> = repository.getall()
-
-
-
+    fun allactividades(): Flow<List<Actividad>> = actividadDao.getAllActividades()
 
 
+    suspend fun insert(actividad: Actividad)
+    {
+        actividadDao.crearActividad(actividad)
+    }
 
+}
 
+class MainActivityViewModelFactory(private val actividadDao: ActividadDao): ViewModelProvider.Factory{
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+        if(modelClass.isAssignableFrom(MainActivityViewModel::class.java))
+        {
+            @Suppress("UNCHECKED_CAST")
+            return MainActivityViewModel(actividadDao) as T
+        }
+
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 
 }

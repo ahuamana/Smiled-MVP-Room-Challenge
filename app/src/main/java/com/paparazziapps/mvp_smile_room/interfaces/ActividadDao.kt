@@ -1,8 +1,8 @@
 package com.paparazziapps.mvp_smile_room.interfaces
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.paparazziapps.mvp_smile_room.models.Actividad
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ActividadDao {
@@ -19,6 +19,6 @@ interface ActividadDao {
     @Query("Delete from table_actividad")
     suspend fun deteleAll()
 
-    @Query("Select * from table_actividad order by fecha_inicio desc")
-    fun getAllActividades(): List<Actividad>
+    @Query("Select * from table_actividad order by codigo desc")
+    fun getAllActividades(): Flow<List<Actividad>>
 }

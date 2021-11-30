@@ -3,30 +3,34 @@ package com.paparazziapps.mvp_smile_room.activities
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Window
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
-import com.paparazziapps.mvp_smile_room.R
+import androidx.recyclerview.widget.RecyclerView
 import com.paparazziapps.mvp_smile_room.ViewModels.MainActivityViewModel
-import com.paparazziapps.mvp_smile_room.adapters.ActividadAdapter
+import com.paparazziapps.mvp_smile_room.ViewModels.MainActivityViewModelFactory
+import com.paparazziapps.mvp_smile_room.adapters.Adapter
+import com.paparazziapps.mvp_smile_room.appdatabase.ActividadAplication
 import com.paparazziapps.mvp_smile_room.databinding.ActivityMainBinding
 import com.paparazziapps.mvp_smile_room.databinding.CardviewAddActivityBinding
 import com.paparazziapps.mvp_smile_room.models.Actividad
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
+    lateinit var mAdapter: Adapter
 
+    private lateinit var viewModel2: MainActivityViewModel
 
-    lateinit var mAdapter: ActividadAdapter
-    lateinit var viewModel:MainActivityViewModel
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var actividad: Actividad
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +39,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         //all code here
+
+
+
+        viewModel2 = ViewModelProvider(
+            this,
+            MainActivityViewModelFactory((application as ActividadAplication).database.ActividadDao())
+        ).get(MainActivityViewModel::class.java)
+
+
         showAllActividades()
+
 
         binding.fabAdd.setOnClickListener {
             showDialog()
@@ -46,19 +60,24 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showAllActividades() {
+        recyclerView = binding.recyclerview
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
+        mAdapter = Adapter({})
 
-        binding.recyclerview.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            mAdapter = ActividadAdapter(this@MainActivity)
-            adapter= mAdapter
-            val divider = DividerItemDecoration(applicationContext,VERTICAL)
-            addItemDecoration(divider)
+        recyclerView.adapter = mAdapter
+
+        lifecycle.coroutineScope.launch {
+            viewModel2.allactividades().collect{
+                mAdapter.submitList(it)
+            }
         }
+
+
     }
 
     private fun showDialog() {
 
-        lateinit var actividad: Actividad
+
         val dialog = Dialog(this@MainActivity)
 
         var binding2: CardviewAddActivityBinding
@@ -73,6 +92,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding2.okButton.setOnClickListener {
+
+            actividad = Actividad()
+            actividad.titulo = binding2.titulo.text.toString()
+
+            lifecycle.coroutineScope.launch {
+                viewModel2.insert(actividad)
+                dialog.dismiss()
+            }
+
 
         }
 

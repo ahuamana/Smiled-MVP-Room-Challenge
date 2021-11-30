@@ -8,24 +8,24 @@ import androidx.room.PrimaryKey
 data class Actividad (
 
     @PrimaryKey(autoGenerate = true)
-    val codigo:Int,
+    var codigo:Int = 0,
 
     @ColumnInfo(name = "numberRamdon")
-    val numberRamdon:Int,
+    var numberRamdon:Int = 0 ,
 
     @ColumnInfo(name = "titulo")
-    val titulo:String,
+    var titulo:String = "none",
 
     @ColumnInfo(name = "contenido")
-    val contenido:String,
+    var contenido:String = "none",
 
     @ColumnInfo(name = "fecha_inicio")
-    val fecha_inicio:Long,
+    var fecha_inicio:Long = 1000,
 
     @ColumnInfo(name = "fecha_fin")
-    val fecha_fin:String,
+    var fecha_fin:String = "none",
 
     @ColumnInfo(name = "isCompleted")
-    val isCompleted:Boolean
+    var isCompleted:Boolean= false
 
 )
