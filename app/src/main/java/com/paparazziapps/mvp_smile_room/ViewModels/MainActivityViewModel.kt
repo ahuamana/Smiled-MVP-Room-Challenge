@@ -3,9 +3,10 @@ package com.paparazziapps.mvp_smile_room.ViewModels
 import androidx.lifecycle.*
 import com.paparazziapps.mvp_smile_room.interfaces.ActividadDao
 import com.paparazziapps.mvp_smile_room.models.Actividad
+import com.paparazziapps.mvp_smile_room.repository.ActividadRepository
 import kotlinx.coroutines.flow.Flow
 
-class MainActivityViewModel(private val actividadDao: ActividadDao) : ViewModel() {
+class MainActivityViewModel(private val repository: ActividadRepository) : ViewModel() {
 
     /*
     lateinit var allActividades: Flow<List<Actividad>>
@@ -17,24 +18,24 @@ class MainActivityViewModel(private val actividadDao: ActividadDao) : ViewModel(
     }
     */
 
-    fun allactividades(): Flow<List<Actividad>> = actividadDao.getAllActividades()
+    fun allactividades(): Flow<List<Actividad>> = repository.getall()
 
 
     suspend fun insert(actividad: Actividad)
     {
-        actividadDao.crearActividad(actividad)
+        repository.insert(actividad)
     }
 
 }
 
-class MainActivityViewModelFactory(private val actividadDao: ActividadDao): ViewModelProvider.Factory{
+class MainActivityViewModelFactory(private val repository: ActividadRepository): ViewModelProvider.Factory{
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
         if(modelClass.isAssignableFrom(MainActivityViewModel::class.java))
         {
             @Suppress("UNCHECKED_CAST")
-            return MainActivityViewModel(actividadDao) as T
+            return MainActivityViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

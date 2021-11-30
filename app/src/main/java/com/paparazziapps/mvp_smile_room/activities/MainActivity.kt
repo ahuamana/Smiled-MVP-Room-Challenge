@@ -16,6 +16,7 @@ import com.paparazziapps.mvp_smile_room.appdatabase.ActividadAplication
 import com.paparazziapps.mvp_smile_room.databinding.ActivityMainBinding
 import com.paparazziapps.mvp_smile_room.databinding.CardviewAddActivityBinding
 import com.paparazziapps.mvp_smile_room.models.Actividad
+import com.paparazziapps.mvp_smile_room.repository.ActividadRepository
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var actividad: Actividad
 
+    private lateinit var repository: ActividadRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,11 +43,11 @@ class MainActivity : AppCompatActivity() {
 
         //all code here
 
-
+        repository = ActividadRepository((application as ActividadAplication).database.ActividadDao())
 
         viewModel2 = ViewModelProvider(
             this,
-            MainActivityViewModelFactory((application as ActividadAplication).database.ActividadDao())
+            MainActivityViewModelFactory(repository)
         ).get(MainActivityViewModel::class.java)
 
 
