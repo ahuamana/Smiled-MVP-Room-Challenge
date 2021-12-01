@@ -35,5 +35,10 @@ class ActividadRepository(private val dao: ActividadDao) {
         return dao.getAllNotCompletedActividades()
     }
 
+    fun updateIsCompleted(isCompleted:Boolean, codigo:Int)
+    {
+        dao.changeIsCompleted(isCompleted,codigo)
+    }
+
 
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.paparazziapps.mvp_smile_room.activities.ExtraInfoActividadActivity
+import com.paparazziapps.mvp_smile_room.activities.MainActivity
 import com.paparazziapps.mvp_smile_room.databinding.CardviewActividadBinding
 import com.paparazziapps.mvp_smile_room.databinding.CardviewAddActivityBinding
 import com.paparazziapps.mvp_smile_room.models.Actividad
@@ -85,18 +86,20 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit ,private val
            binding.fechaFin.text = actividad.fecha_fin
            binding.descripcion.text = actividad.contenido
 
-           var lastElement = lista.size - position
+           var lastElement:Int = lista.size - position
 
            if(lastElement<10)
            {
-               binding.activityNumber.text = "0${lista.size - position}"
+               binding.activityNumber.text = "0${lastElement}"
                //Log.e("TAG MENOR","Lista"+ position )
-               //Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
+               Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
+               Log.e("TAG", "LASTELEMENT: ${lastElement}")
            }else
            {
-               binding.activityNumber.text = "${lista.size - position}"
+               binding.activityNumber.text = "${lastElement}"
                //Log.e("TAG MAYOR","Lista"+ position )
-               //Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
+               Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
+               Log.e("TAG", "LASTELEMENT: ${lastElement}")
            }
 
            binding.cardview.setOnClickListener {
@@ -108,6 +111,42 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit ,private val
                    putExtra("fecha_fin",actividad.fecha_fin)
                }
                context.startActivity(intent)
+           }
+
+
+           if(actividad.isCompleted)
+           {
+               binding.checkBox.isChecked = true
+           }else
+           {
+               if(!actividad.isCompleted)
+               {
+                   binding.checkBox.isChecked = false
+               }
+           }
+
+           /*
+           binding.checkBox.setOnCheckedChangeListener { compoundButton, isChecked ->
+               Log.e("TAG"," CHECCKED CHANGE: ${isChecked}")
+
+
+           }*/
+
+           binding.checkBox.setOnClickListener {
+
+               var isChecked = binding.checkBox.isChecked
+
+              if(isChecked)
+              {
+                  !isChecked
+
+              }else
+              {
+                  !isChecked
+              }
+
+               (context as MainActivity).updateIsCompleted(isChecked,actividad.codigo)
+
            }
 
        }

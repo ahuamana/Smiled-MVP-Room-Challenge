@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="15dp"
@@ -16,6 +15,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:text="Nueva Actividad"
             android:textStyle="bold"
@@ -30,18 +30,41 @@
             android:layout_marginBottom="15dp"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/titulo"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@null"
-                android:hint="Titulo"
-                android:lines="2"
-                android:text=""
-                android:textColorHint="#99202020"
-                android:textSize="14dp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint="Titulo"
+                    android:lines="2"
+                    android:text="Titulo"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint="Titulo"
+                    android:lines="2"
+                    android:text=""
+                    android:textColorHint="#99202020"
+                    android:textSize="13dp" />
+
+            </LinearLayout>
+
+
 
         </androidx.cardview.widget.CardView>
 
@@ -52,20 +75,41 @@
             android:layout_marginBottom="15dp"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/contenido"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:text=""
-                android:textSize="14dp"
-                android:textColorHint="#99202020"
-                android:background="@null"
-                android:lines="5"
-                android:gravity="start"
-                android:paddingTop="3dp"
-                android:hint="Contenido"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint="Titulo"
+                    android:lines="2"
+                    android:text="Contenido"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/contenido"
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text=""
+                    android:textSize="14dp"
+                    android:textColorHint="#99202020"
+                    android:background="@null"
+                    android:lines="5"
+                    android:gravity="start"
+                    android:paddingTop="3dp"
+                    android:hint="Contenido"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -77,20 +121,41 @@
             android:layout_marginBottom="25dp"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/fecha_fin"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:text=""
-                android:textSize="14dp"
-                android:textColorHint="#99202020"
-                android:background="@null"
-                android:lines="3"
-                android:gravity="center_vertical"
-                android:paddingTop="3dp"
-                android:hint="Finaliza (dd/mm/yyyy)"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint="Titulo"
+                    android:lines="2"
+                    android:text="Finaliza"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fecha_fin"
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text=""
+                    android:textSize="14dp"
+                    android:textColorHint="#99202020"
+                    android:background="@null"
+                    android:lines="3"
+                    android:gravity="center_vertical"
+                    android:paddingTop="3dp"
+                    android:hint="Finaliza (dd/mm/yyyy)"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -100,14 +165,14 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:text="Cancelar"
                 android:layout_marginEnd="5dp"
                 android:layout_height="wrap_content"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/ok_button"
                 android:layout_width="wrap_content"
                 android:text="Aceptar"

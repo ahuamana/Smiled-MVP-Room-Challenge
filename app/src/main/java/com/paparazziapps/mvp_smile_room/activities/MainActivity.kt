@@ -3,6 +3,7 @@ package com.paparazziapps.mvp_smile_room.activities
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Window
 import androidx.lifecycle.ViewModelProvider
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         lifecycle.coroutineScope.launch {
             viewModel2.allactividades().collect{
                 mAdapter.submitList(it)
-                mAdapter.setList(mAdapter.currentList)
+                mAdapter.setList(it)
             }
         }
 
@@ -108,7 +109,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showDialog() {
-
 
         val dialog = Dialog(this@MainActivity)
 
@@ -144,29 +144,13 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    override fun onResume() {
-        super.onResume()
 
-
-        if(getDrawable(R.drawable.ic_visibility) == binding.mytoolbar.imageVisibility.drawable)
-        {
-            lifecycle.coroutineScope.launch {
-                viewModel2.allactividades().collect{
-                    mAdapter.submitList(it)
-                    mAdapter.setList(mAdapter.currentList)
-                }
-            }
-
-        }else
-        {
-            lifecycle.coroutineScope.launch {
-                viewModel2.allNotCompletedActividades().collect{
-                    mAdapter.submitList(it)
-                    mAdapter.setList(mAdapter.currentList)
-                }
-            }
+    fun updateIsCompleted(isCompleted:Boolean, codigo:Int)
+    {
+        lifecycle.coroutineScope.launch {
+            viewModel2.updateIsCompleted(isCompleted,codigo)
+            Log.e("TAG","CURRENT LIST ${mAdapter.currentList.size}")
         }
-
 
 
     }

@@ -24,4 +24,7 @@ interface ActividadDao {
 
     @Query("Select * from table_actividad where isCompleted= 1 order by codigo desc")
     fun getAllNotCompletedActividades() : Flow<List<Actividad>>
+
+    @Query("update table_actividad set isCompleted= :iscompleted where codigo = :codigo")
+    fun changeIsCompleted(iscompleted: Boolean, codigo: Int)
 }

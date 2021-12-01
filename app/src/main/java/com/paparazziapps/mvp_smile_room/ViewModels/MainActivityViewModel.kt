@@ -25,6 +25,11 @@ class MainActivityViewModel(private val repository: ActividadRepository) : ViewM
         repository.insert(actividad)
     }
 
+    fun updateIsCompleted(isCompleted:Boolean, codigo:Int)
+    {
+        repository.updateIsCompleted(isCompleted, codigo)
+    }
+
 
 }
 
