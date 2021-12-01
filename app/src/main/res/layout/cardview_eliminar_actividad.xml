@@ -37,14 +37,14 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:text="Cancelar"
                 android:layout_marginEnd="5dp"
                 android:layout_height="wrap_content"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/ok_button"
                 android:layout_width="wrap_content"
                 android:text="Confirmar"

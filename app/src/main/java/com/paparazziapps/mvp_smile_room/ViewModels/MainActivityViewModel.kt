@@ -4,7 +4,9 @@ import androidx.lifecycle.*
 import com.paparazziapps.mvp_smile_room.interfaces.ActividadDao
 import com.paparazziapps.mvp_smile_room.models.Actividad
 import com.paparazziapps.mvp_smile_room.repository.ActividadRepository
+import com.paparazziapps.mvp_smile_room.repository.ComentarioRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class MainActivityViewModel(private val repository: ActividadRepository) : ViewModel() {
 
@@ -30,6 +32,16 @@ class MainActivityViewModel(private val repository: ActividadRepository) : ViewM
         repository.updateIsCompleted(isCompleted, codigo)
     }
 
+    fun deleteActividadByCodigo(codigo: Int)
+    {
+
+        repository.deleteActividad(codigo)
+    }
+
+    fun updateByCodigo(actividad: Actividad)
+    {
+        repository.updateByCodigo( actividad)
+    }
 
 }
 
@@ -47,3 +59,5 @@ class MainActivityViewModelFactory(private val repository: ActividadRepository):
     }
 
 }
+
+

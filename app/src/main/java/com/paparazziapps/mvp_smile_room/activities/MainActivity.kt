@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
 
     private lateinit var mAdapter: Adapter
+    private lateinit var mAdapterNotCompleted: Adapter
     private lateinit var viewModel2: MainActivityViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var actividad: Actividad
@@ -51,11 +52,15 @@ class MainActivity : AppCompatActivity() {
             showDialog()
         }
 
-        showAllActividades()
 
         binding.mytoolbar.imageVisibility.setOnClickListener {
+
+            Log.e("TAG","HICISTE CLICK EN IMAGEVISIBILITY")
             showOtherActividades()
         }
+
+
+        showAllActividades()
     }
 
     private fun showOtherActividades() {
@@ -66,42 +71,40 @@ class MainActivity : AppCompatActivity() {
         {
            //Pressed
             binding.mytoolbar.imageVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
-            mAdapter.submitList(null)
+            recyclerView.adapter = mAdapterNotCompleted
 
-            lifecycle.coroutineScope.launch {
-                viewModel2.allNotCompletedActividades().collect{
-                    mAdapter.submitList(it)
-                    mAdapter.setList(mAdapter.currentList)
-                }
-            }
 
         }else
         {
             binding.mytoolbar.imageVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility))
-            mAdapter.submitList(null)
+            recyclerView.adapter = mAdapter
 
-            lifecycle.coroutineScope.launch {
-                viewModel2.allactividades().collect{
-                    mAdapter.submitList(it)
-                    mAdapter.setList(mAdapter.currentList)
-                }
-            }
+
 
         }
     }
 
 
     private fun showAllActividades() {
+
+        Log.e("TAG","SHOW POR DEFECTO ALL ACTIVIDADES")
+
         recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
         mAdapter = Adapter({},this@MainActivity)
+        mAdapterNotCompleted = Adapter({},this@MainActivity)
 
         recyclerView.adapter = mAdapter
 
         lifecycle.coroutineScope.launch {
             viewModel2.allactividades().collect{
                 mAdapter.submitList(it)
-                mAdapter.setList(it)
+            }
+        }
+
+        lifecycle.coroutineScope.launch {
+            viewModel2.allNotCompletedActividades().collect{
+                mAdapterNotCompleted.submitList(it)
             }
         }
 
@@ -135,8 +138,8 @@ class MainActivity : AppCompatActivity() {
             lifecycle.coroutineScope.launch {
                 viewModel2.insert(actividad)
                 dialog.dismiss()
-                mAdapter.setList(mAdapter.currentList)
             }
+
 
 
         }
@@ -147,9 +150,9 @@ class MainActivity : AppCompatActivity() {
 
     fun updateIsCompleted(isCompleted:Boolean, codigo:Int)
     {
+        Log.e("TAG","ACTUALIZA ACTIVAD GENERADO POR CHECKBOX")
         lifecycle.coroutineScope.launch {
             viewModel2.updateIsCompleted(isCompleted,codigo)
-            Log.e("TAG","CURRENT LIST ${mAdapter.currentList.size}")
         }
 
 

@@ -27,4 +27,11 @@ interface ActividadDao {
 
     @Query("update table_actividad set isCompleted= :iscompleted where codigo = :codigo")
     fun changeIsCompleted(iscompleted: Boolean, codigo: Int)
+
+    @Query("Delete from table_actividad where codigo = :codigo")
+    fun deleteActividad(codigo: Int)
+
+    @Query ("update table_actividad  set titulo= :tituloReceived, contenido= :contenidoReceived, fecha_fin=:fechaReceived where codigo =:codigoReceived")
+    fun updateActividadByCodigo(codigoReceived: Int,tituloReceived:String,contenidoReceived:String, fechaReceived:String)
+
 }

@@ -40,5 +40,15 @@ class ActividadRepository(private val dao: ActividadDao) {
         dao.changeIsCompleted(isCompleted,codigo)
     }
 
+    fun deleteActividad(codigo: Int)
+    {
+        dao.deleteActividad(codigo)
+    }
+
+    fun updateByCodigo(actividad: Actividad)
+    {
+        dao.updateActividadByCodigo(actividad.codigo,actividad.titulo,actividad.contenido,actividad.fecha_fin)
+    }
+
 
 }
