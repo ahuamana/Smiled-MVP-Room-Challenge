@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.paparazziapps.mvp_smile_room.R
 import com.paparazziapps.mvp_smile_room.ViewModels.MainActivityViewModel
 import com.paparazziapps.mvp_smile_room.ViewModels.MainActivityViewModelFactory
 import com.paparazziapps.mvp_smile_room.adapters.Adapter
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var actividad: Actividad
     private lateinit var repository: ActividadRepository
 
+    var isPressed = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,14 +52,48 @@ class MainActivity : AppCompatActivity() {
 
         showAllActividades()
 
+        binding.mytoolbar.imageVisibility.setOnClickListener {
+            showOtherActividades()
+        }
+    }
 
+    private fun showOtherActividades() {
+
+        isPressed = !isPressed
+
+        if(isPressed)
+        {
+           //Pressed
+            binding.mytoolbar.imageVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
+            mAdapter.submitList(null)
+
+            lifecycle.coroutineScope.launch {
+                viewModel2.allNotCompletedActividades().collect{
+                    mAdapter.submitList(it)
+                    mAdapter.setList(mAdapter.currentList)
+                }
+            }
+
+        }else
+        {
+            binding.mytoolbar.imageVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility))
+            mAdapter.submitList(null)
+
+            lifecycle.coroutineScope.launch {
+                viewModel2.allactividades().collect{
+                    mAdapter.submitList(it)
+                    mAdapter.setList(mAdapter.currentList)
+                }
+            }
+
+        }
     }
 
 
     private fun showAllActividades() {
         recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-        mAdapter = Adapter({})
+        mAdapter = Adapter({},this@MainActivity)
 
         recyclerView.adapter = mAdapter
 
@@ -105,6 +142,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
+        if(getDrawable(R.drawable.ic_visibility) == binding.mytoolbar.imageVisibility.drawable)
+        {
+            lifecycle.coroutineScope.launch {
+                viewModel2.allactividades().collect{
+                    mAdapter.submitList(it)
+                    mAdapter.setList(mAdapter.currentList)
+                }
+            }
+
+        }else
+        {
+            lifecycle.coroutineScope.launch {
+                viewModel2.allNotCompletedActividades().collect{
+                    mAdapter.submitList(it)
+                    mAdapter.setList(mAdapter.currentList)
+                }
+            }
+        }
+
+
+
     }
 
 }

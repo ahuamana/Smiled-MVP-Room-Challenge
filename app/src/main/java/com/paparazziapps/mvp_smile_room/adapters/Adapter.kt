@@ -1,12 +1,15 @@
 package com.paparazziapps.mvp_smile_room.adapters
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.paparazziapps.mvp_smile_room.activities.ExtraInfoActividadActivity
 import com.paparazziapps.mvp_smile_room.databinding.CardviewActividadBinding
 import com.paparazziapps.mvp_smile_room.databinding.CardviewAddActivityBinding
 import com.paparazziapps.mvp_smile_room.models.Actividad
@@ -17,7 +20,7 @@ import kotlin.random.Random
 //¿Recuerdas la clase DiffCallback que significa?
 //Este es solo un objeto que ayuda a ListAdapter a determinar qué elementos de las listas nuevas y anteriores son diferentes cuando se actualiza la lista.
 
-class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapter<Actividad, Adapter.MyViewHolder>(DiffCallback)  {
+class Adapter (private val onItemClickListener: (Actividad) -> Unit ,private val context: Context) : ListAdapter<Actividad, Adapter.MyViewHolder>(DiffCallback)  {
 
 
 
@@ -38,6 +41,7 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapt
                 return oldItem == newItem
             }
 
+
         }
 
     }
@@ -47,10 +51,6 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapt
         lista = list
     }
 
-    fun getList() : List<Actividad>
-    {
-        return lista
-    }
 
 
 
@@ -70,14 +70,14 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapt
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         //All code here
-        holder.bind(getItem(position), position)
+        holder.bind(getItem(position), position, context)
     }
 
 
    class MyViewHolder(private var binding: CardviewActividadBinding) : RecyclerView.ViewHolder(binding.root)
    {
        @SuppressLint ("SimpleDateFormat")
-       fun bind(actividad: Actividad, position: Int)
+       fun bind(actividad: Actividad, position: Int, context: Context)
        {
            val new=Random.nextInt(0,20)
            binding.titulo.text  = (actividad.titulo + " - ${new}")
@@ -99,8 +99,18 @@ class Adapter (private val onItemClickListener: (Actividad) -> Unit) : ListAdapt
                //Log.e("TAG TITULO"," TITULO: ${binding.titulo.text.toString()}  POSITTION: ${position}  LISTA.SIZE= ${lista.size}")
            }
 
-           //Log.e("TAG","Lista"+ lista.size )
+           binding.cardview.setOnClickListener {
+               var intent = Intent(context,ExtraInfoActividadActivity::class.java).apply {
+                   putExtra("codigo",actividad.codigo)
+                   putExtra("titulo",actividad.titulo)
+                   putExtra("contenido",actividad.contenido)
+                   putExtra("fecha_inicio",actividad.fecha_inicio)
+                   putExtra("fecha_fin",actividad.fecha_fin)
+               }
+               context.startActivity(intent)
+           }
 
        }
    }
+
 }

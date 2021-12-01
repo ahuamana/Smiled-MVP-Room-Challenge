@@ -32,7 +32,7 @@ class ActividadRepository(private val dao: ActividadDao) {
 
     fun getallNotCompleted() : Flow<List<Actividad>>
     {
-        return dao.getAllCompletedActividades()
+        return dao.getAllNotCompletedActividades()
     }
 
 
